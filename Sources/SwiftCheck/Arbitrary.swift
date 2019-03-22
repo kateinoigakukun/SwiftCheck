@@ -42,7 +42,7 @@ public protocol Arbitrary {
 	/// necessary to generate values.  It should not, however, be written as a
 	/// deterministic function.  If such a generator is needed, combinators are
 	/// provided in `Gen.swift`.
-	static var arbitrary : Gen<Self> { get }
+	static func arbitrary() -> Gen<Self>
 
 	/// An optional shrinking function.  If this function goes unimplemented, it
 	/// is the same as returning the empty list.
@@ -55,6 +55,10 @@ public protocol Arbitrary {
 }
 
 extension Arbitrary {
+	// For backward compatibility
+	public static var arbitrary : Gen<Self> {
+		return arbitrary()
+	}
 	/// The implementation of a shrink that returns no alternatives.
 	public static func shrink(_ : Self) -> [Self] {
 		return []
